@@ -1,8 +1,8 @@
 package com.example.backend.service;
 
 import com.example.backend.controller.AiQuestionController.GenerateQuestionsRequest;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -18,12 +18,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AiQuestionService {
     private static final int MAX_REQUESTS_PER_MINUTE = 5;
     private final RestClient restClient = RestClient.create();
-    private final ObjectMapper objectMapper;
+    private final JsonMapper objectMapper;
     private final String apiKey;
     private final String model;
     private final ConcurrentHashMap<String, ArrayDeque<Instant>> requestTimes = new ConcurrentHashMap<>();
 
-    public AiQuestionService(ObjectMapper objectMapper,
+    public AiQuestionService(JsonMapper objectMapper,
                              @Value("${app.openai.api-key:}") String apiKey,
                              @Value("${app.openai.model:gpt-4.1-mini}") String model) {
         this.objectMapper = objectMapper;
